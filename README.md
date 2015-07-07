@@ -28,3 +28,5 @@ if ($('.quick-shop-trigger').length) {
 **quickShop:** Selector for quick shop wrapper child (secondary wrapper).
 
 **quickShopTrigger:** Selector for quick shop trigger.
+
+**quickShopClose:** Optional. Selector for close button. Must be placed within the **quickShop** element.

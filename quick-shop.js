@@ -38,7 +38,11 @@ export default class QuickShop {
     this.$el.addClass('visible');
 
     utils.api.product.getById(this.productId, { template: this.options.template }, (err, response) => {
-      this.$quickShop.html(response);
+      if ($(this.options.quickShopClose).length) {
+        $(this.options.quickShopClose).after(response);
+      } else {
+        this.$quickShop.html(response);
+      }
 
       for (let i of this.$el.find('select').length) {
         new SelectWrapper(this.$el.find('select').eq(i));
@@ -64,7 +68,9 @@ export default class QuickShop {
   }
 
   _close(event) {
-    if (!$(event.target).closest(this.options.quickShop).length) {
+    const $target = $(event.target);
+
+    if ($target.is(this.options.quickShopClose) || !$target.closest(this.options.quickShop).length) {
       this.$el.removeClass('visible').one('trend', () => {
         $(document.body).css('overflow','visible');
         this.$el.add(this.$quickShop).removeClass('active');
@@ -84,8 +90,8 @@ export default class QuickShop {
 
   _productOptions() {
     this.$el.find('.product-options').on('change', (event) => {
-      let $target = $(event.target);
-      let $ele = $(event.currentTarget);
+      const $target = $(event.target);
+      const $ele = $(event.currentTarget);
       let targetVal = $target.val();
       let options = {};
 
@@ -109,8 +115,8 @@ export default class QuickShop {
 
       const $button = this.$quickShop.find('.add-to-cart');
       const $productMessage = this.$quickShop.find('.product-message');
-      let quantity = this.$quickShop.find('.product-quantity[name=qty\\[\\]]').val();
-      let $optionsContainer = this.$quickShop.find('.product-options');
+      let quantity = this.$quickShop.find('.product-quantity').val();
+      const $optionsContainer = this.$quickShop.find('.product-options');
       let options;
 
       $button.find(".spinner").addClass("visible");
