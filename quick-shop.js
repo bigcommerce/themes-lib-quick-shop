@@ -34,7 +34,7 @@ export default class QuickShop {
   _initialize(event) {
     this.productId = $(event.target).data('product-id');
 
-    $(document.body).css('overflow','hidden');
+    $(document.body).addClass('scroll-locked');
     this.$el.addClass('visible');
 
     utils.api.product.getById(this.productId, { template: this.options.template }, (err, response) => {
@@ -72,7 +72,7 @@ export default class QuickShop {
 
     if ($target.is(this.options.quickShopClose) || !$target.closest(this.options.quickShop).length) {
       this.$el.removeClass('visible').one('trend', () => {
-        $(document.body).css('overflow','visible');
+        $(document.body).removeClass('scroll-locked');
         this.$el.add(this.$quickShop).removeClass('active');
       });
     }
