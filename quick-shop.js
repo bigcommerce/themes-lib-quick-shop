@@ -2,7 +2,6 @@ import $ from 'jquery';
 import imagesLoaded from 'imagesloaded';
 import trend from 'jquery-trend';
 import utils from 'bigcommerce/stencil-utils';
-import SelectWrapper from '../global/select-wrapper';
 
 export default class QuickShop {
   constructor(options) {
@@ -42,10 +41,6 @@ export default class QuickShop {
         $(this.options.quickShopClose).after(response);
       } else {
         this.$quickShop.html(response);
-      }
-
-      for (let i of this.$el.find('select').length) {
-        new SelectWrapper(this.$el.find('select').eq(i));
       }
 
       // The knockout.js view model
