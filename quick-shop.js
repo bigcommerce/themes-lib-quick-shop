@@ -22,16 +22,16 @@ export default class QuickShop {
   _bindEvents() {
     $('body').on('click', this.options.quickShopTrigger, (event) => {
       event.preventDefault();
-      this._initializeQuickShop(event);
+      this._initialize(event);
     });
 
     this.$el.on('click', (event) => {
       event.preventDefault();
-      this._closeQuickShop(event);
+      this._close(event);
     });
   }
 
-  _initializeQuickShop(event) {
+  _initialize(event) {
     this.productId = $(event.target).data('product-id');
 
     $(document.body).css('overflow','hidden');
@@ -59,11 +59,11 @@ export default class QuickShop {
       ko.applyBindings(this.viewModel, this.$quickShop.find('[data-cart-item-add]').get(0));
       this._productOptions();
       this._addProductToCart();
-      this._positionQuickShop();
+      this._position();
     });
   }
 
-  _closeQuickShop(event) {
+  _close(event) {
     if (!$(event.target).closest(this.options.quickShop).length) {
       this.$el.removeClass('visible').one('trend', () => {
         $(document.body).css('overflow','visible');
@@ -72,7 +72,7 @@ export default class QuickShop {
     }
   }
 
-  _positionQuickShop() {
+  _position() {
     this.$quickShop.imagesLoaded(() => {
       this.$quickShop.css({
         marginTop: -(this.$quickShop.outerHeight() / 2),
