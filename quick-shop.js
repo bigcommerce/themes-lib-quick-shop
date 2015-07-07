@@ -21,10 +21,12 @@ export default class QuickShop {
 
   _bindEvents() {
     $('body').on('click', this.options.quickShopTrigger, (event) => {
+      event.preventDefault();
       this._initializeQuickShop(event);
     });
 
     this.$el.on('click', (event) => {
+      event.preventDefault();
       this._closeQuickShop(event);
     });
   }
