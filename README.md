@@ -24,5 +24,7 @@ if ($('.quick-shop-trigger').length) {
 ### Options
 
 **template:** Template in which to render quick shop content.
+
 **quickShop:** Selector for quick shop wrapper child (secondary wrapper).
+
 **quickShopTrigger:** Selector for quick shop trigger.
