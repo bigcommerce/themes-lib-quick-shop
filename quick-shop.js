@@ -94,7 +94,7 @@ export default class QuickShop {
     this.$el.find(this.options.productOptions).on('change', (event) => {
       const $target = $(event.target);
       const $ele = $(event.currentTarget);
-      let targetVal = $target.val();
+      const targetVal = $target.val();
       let options = {};
 
       if (targetVal) {
@@ -117,31 +117,29 @@ export default class QuickShop {
     utils.hooks.on('cart-item-add', (event) => {
       event.preventDefault();
 
-      let quantity = this.$quickShop.find('input[name="qty\[\]"]').val();
+      const quantity = this.$quickShop.find('input[name="qty\[\]"]').val();
       const $optionsContainer = this.$quickShop.find(this.options.productOptions);
-      let options;
-
-      options = this._getOptionValues($optionsContainer);
+      const options = this._getOptionValues($optionsContainer);
 
       this.options.onProductAdd.call();
 
       // add item to cart
       utils.api.cart.itemAdd(this.productId, quantity, options, (err, response) => {
-        let cartResponse = err || response;
+        const cartResponse = err || response;
         this.options.afterProductAdd(cartResponse, quantity);
       });
     });
   }
 
   _getOptionValues($container) {
-    let $optionValues = $container.find(':input:radio:checked, :input:not(:radio)');
-    let params = {};
+    const $optionValues = $container.find(':input:radio:checked, :input:not(:radio)');
+    const params = {};
 
     // iterate over values
     $optionValues.each((index, ele) => {
-      let $ele = $(ele);
-      let name = $ele.attr('name');
-      let val = $ele.val();
+      const $ele = $(ele);
+      const name = $ele.attr('name');
+      const val = $ele.val();
 
       params[name] = val;
     });
