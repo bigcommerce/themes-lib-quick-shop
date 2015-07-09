@@ -35,7 +35,7 @@ export default class QuickShop {
   }
 
   open(event) {
-    this.productId = $(event.target).data('product-id');
+    this.productId = $(event.currentTarget).data('product-id');
 
     $(document.body).addClass(this.options.bodyOverflowClass);
     this.$el.addClass('visible');
