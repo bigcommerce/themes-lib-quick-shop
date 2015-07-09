@@ -26,15 +26,15 @@ export default class QuickShop {
   _bindEvents() {
     $('body').on('click', this.options.quickShopTrigger, (event) => {
       event.preventDefault();
-      this._initialize(event);
+      this.open(event);
     });
 
     this.$el.on('click', (event) => {
-      this._close(event);
+      this.close(event);
     });
   }
 
-  _initialize(event) {
+  open(event) {
     this.productId = $(event.target).data('product-id');
 
     $(document.body).addClass(this.options.bodyOverflowClass);
@@ -66,7 +66,7 @@ export default class QuickShop {
     });
   }
 
-  _close(event) {
+  close(event) {
     const $target = $(event.target);
     if ($target.is(this.options.quickShopClose)) {
       event.preventDefault();
