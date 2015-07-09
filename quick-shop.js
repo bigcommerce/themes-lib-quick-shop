@@ -10,7 +10,12 @@ export default class QuickShop {
     this.options = $.extend({
       template: 'products/quick-shop',
       quickShop: '.quick-shop',
-      quickShopTrigger: '.quick-shop-trigger'
+      quickShopTrigger: '.quick-shop-trigger',
+      productOptions: '.product-options',
+      bodyOverflowClass: 'scroll-locked',
+      onProductAdd: () => { console.log('onProductAdd'); },
+      afterProductAdd: () => { console.log('afterProductAdd'); },
+      onOptionChange: () => { console.log('onOptionChange'); }
     }, options);
 
     this.$quickShop = this.$el.children(this.options.quickShop);
@@ -25,7 +30,6 @@ export default class QuickShop {
     });
 
     this.$el.on('click', (event) => {
-      event.preventDefault();
       this._close(event);
     });
   }
@@ -33,7 +37,7 @@ export default class QuickShop {
   _initialize(event) {
     this.productId = $(event.target).data('product-id');
 
-    $(document.body).addClass('scroll-locked');
+    $(document.body).addClass(this.options.bodyOverflowClass);
     this.$el.addClass('visible');
 
     utils.api.product.getById(this.productId, { template: this.options.template }, (err, response) => {
@@ -64,10 +68,13 @@ export default class QuickShop {
 
   _close(event) {
     const $target = $(event.target);
+    if ($target.is(this.options.quickShopClose)) {
+      event.preventDefault();
+    }
 
     if ($target.is(this.options.quickShopClose) || !$target.closest(this.options.quickShop).length) {
       this.$el.removeClass('visible').one('trend', () => {
-        $(document.body).removeClass('scroll-locked');
+        $(document.body).removeClass(this.options.bodyOverflowClass);
         this.$el.add(this.$quickShop).removeClass('active');
       });
     }
@@ -84,7 +91,7 @@ export default class QuickShop {
   }
 
   _productOptions() {
-    this.$el.find('.product-options').on('change', (event) => {
+    this.$el.find(this.options.productOptions).on('change', (event) => {
       const $target = $(event.target);
       const $ele = $(event.currentTarget);
       let targetVal = $target.val();
@@ -99,6 +106,8 @@ export default class QuickShop {
           this.viewModel.sku(response.data.sku);
           this.viewModel.instock(response.data.instock);
           this.viewModel.purchasable(response.data.purchasable);
+
+          this.options.onOptionChange(response.data);
         });
       }
     });
@@ -108,48 +117,18 @@ export default class QuickShop {
     utils.hooks.on('cart-item-add', (event) => {
       event.preventDefault();
 
-      const $button = this.$quickShop.find('.add-to-cart');
-      const $productMessage = this.$quickShop.find('.product-message');
-      let quantity = this.$quickShop.find('.product-quantity').val();
-      const $optionsContainer = this.$quickShop.find('.product-options');
+      let quantity = this.$quickShop.find('input[name="qty\[\]"]').val();
+      const $optionsContainer = this.$quickShop.find(this.options.productOptions);
       let options;
-
-      $button.find(".spinner").addClass("visible");
 
       options = this._getOptionValues($optionsContainer);
 
+      this.options.onProductAdd.call();
+
       // add item to cart
       utils.api.cart.itemAdd(this.productId, quantity, options, (err, response) => {
-        let message = '';
-
-        // if there is an error
-        if (err || response.data.error) {
-          if (response.data.error === 'out_of_stock') {
-            message = Theme.localization.product.outOfStock;
-            message = message.replace('*quantity*', quantity);
-          } else {
-            message = response.data.error;
-          }
-
-          setTimeout(() => {
-            $productMessage.html(message).addClass('form-error-message');
-            $button.find('.spinner').removeClass('visible');
-          });
-        }
-
-        else {
-          message = Theme.localization.product.addSuccess;
-          message = message
-                      .replace('*product*', this.$quickShop.find('.product-details').data('product-title'))
-                      .replace('*cart_link*', `<a href='${Theme.localization.urls.cart}'>${Theme.localization.product.cartLink}</a>`)
-                      .replace('*continue_link*', `<a href='/'>${Theme.localization.product.homeLink}</a>`)
-                      .replace('*checkout_link*', `<a href='${Theme.localization.urls.checkout}'>${Theme.localization.product.checkoutLink}</a>`);
-
-          setTimeout(() => {
-              $productMessage.html(message).removeClass('form-error-message');
-              $button.find('.spinner').removeClass('visible');
-          }, 500);
-        }
+        let cartResponse = err || response;
+        this.options.afterProductAdd(cartResponse, quantity);
       });
     });
   }

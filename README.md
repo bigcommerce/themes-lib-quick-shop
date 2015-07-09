@@ -30,3 +30,13 @@ if ($('.quick-shop-trigger').length) {
 **quickShopTrigger:** Selector for quick shop trigger.
 
 **quickShopClose:** Optional. Selector for close button. Must be placed within the **quickShop** element.
+
+**productOptions:** Selector for product options wrapper.
+
+**bodyOverflowClass:** Class that toggles body overflow hidden (e.g., 'scroll-locked').
+
+**onProductAdd:** Optional. Callback fired when add to cart button is clicked.
+
+**afterProductAdd:** Optional. Callback fired after BC api responds to add to cart button being clicked.
+
+**onOptionChange:** Optional. Callback fired when an option is changed.
