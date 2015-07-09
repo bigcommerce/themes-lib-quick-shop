@@ -1,7 +1,7 @@
 {
   "name": "bc-quick-shop",
   "description": "Bigcommerce Quick Shop Module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "jspm": {
     "main": "js/quick-shop",
