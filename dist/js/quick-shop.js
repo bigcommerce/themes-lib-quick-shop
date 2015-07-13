@@ -13,6 +13,7 @@ export default class QuickShop {
       quickShopTrigger: '.quick-shop-trigger',
       productOptions: '.product-options',
       bodyOverflowClass: 'scroll-locked',
+      onProductLoad: () => { console.log('onProductLoad'); },
       onProductAdd: () => { console.log('onProductAdd'); },
       afterProductAdd: () => { console.log('afterProductAdd'); },
       onOptionChange: () => { console.log('onOptionChange'); }
@@ -63,6 +64,7 @@ export default class QuickShop {
       this._productOptions();
       this._addProductToCart();
       this._position();
+      this.options.onProductLoad.call();
     });
   }
 
