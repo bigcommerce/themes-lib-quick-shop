@@ -3,7 +3,7 @@
 ### Installation
 
 ```
-jspm install --save bc-quick-shop=bitbucket:pixelunion/bc-quick-shop
+npm i --save github:pixelunion/bc-quick-shop
 ```
 
 
